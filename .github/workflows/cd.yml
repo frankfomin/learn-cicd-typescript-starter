@@ -10,9 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
     steps:
       - name: Check out code
         uses: actions/checkout@v4
+
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -39,5 +43,7 @@ jobs:
       - name: "Submit build to GCP"
         run: "gcloud builds submit --tag us-central1-docker.pkg.dev/dazzling-forest-498911-d8/notely-ar-repo/notely:${{ github.sha }}"
 
+      - name: "Run migrations"
+        run: npm run db:migrate
       - name: Deploy to Cloud Run
         run: gcloud run deploy notely --image us-central1-docker.pkg.dev/dazzling-forest-498911-d8/notely-ar-repo/notely:${{ github.sha }} --region us-central1 --allow-unauthenticated --project dazzling-forest-498911-d8 --max-instances=4
