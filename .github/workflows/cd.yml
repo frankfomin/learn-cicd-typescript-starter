@@ -24,3 +24,17 @@ jobs:
 
       - name: Build application
         run: npm run build
+      
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v3'
+
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
+      
+      - name: "Submit build to GCP"
+        run: "gcloud builds submit --tag us-central1-docker.pkg.dev/dazzling-forest-498911-d8/notely-ar-repo/notely:latest"
