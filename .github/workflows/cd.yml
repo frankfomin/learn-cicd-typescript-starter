@@ -45,5 +45,6 @@ jobs:
 
       - name: "Run migrations"
         run: npm run db:migrate
+        
       - name: Deploy to Cloud Run
         run: gcloud run deploy notely --image us-central1-docker.pkg.dev/dazzling-forest-498911-d8/notely-ar-repo/notely:${{ github.sha }} --region us-central1 --allow-unauthenticated --project dazzling-forest-498911-d8 --max-instances=4
